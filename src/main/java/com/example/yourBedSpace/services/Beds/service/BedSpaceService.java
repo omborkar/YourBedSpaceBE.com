@@ -46,7 +46,7 @@ public class BedSpaceService {
     }
 
     public BedSpaceReqRes updateBedSpace(BedSpaceReqRes request) {
-        BedSpace bedSpace = bedSpaceRepository.findById(request.getId())
+        BedSpace bedSpace = bedSpaceRepository.findById(Long.valueOf(request.getId()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "BedSpace not found"));
 
         bedSpace.setName(request.getName());

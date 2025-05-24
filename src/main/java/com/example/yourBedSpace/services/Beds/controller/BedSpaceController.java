@@ -18,7 +18,7 @@ public class BedSpaceController {
 
     private final BedSpaceService bedSpaceService;
 
-    @PostMapping
+    @PostMapping("addBed")
     public ResponseEntity<?> addBedSpace(@RequestBody BedSpaceReqRes request) {
         BedSpace created = bedSpaceService.createBedSpace(request);
         return ResponseEntity.ok(created);
@@ -40,7 +40,7 @@ public class BedSpaceController {
         return ResponseEntity.ok("BedSpace deleted successfully");
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<BedSpaceReqRes>> getAllBedSpaces() {
         return ResponseEntity.ok(bedSpaceService.getAllBedSpaces());
     }
