@@ -1,21 +1,15 @@
-# Use an official OpenJDK runtime as a parent image
-FROM openjdk:17-jdk-slim
+FROM maven:3.9.6-eclipse-temurin-17
 
-# Set working directory in the container
+WORKDIR /app
+COPY . .
+
+RUN mvn clean package -DskipTests
+
+# Use lightweight JRE image for running the jar
+FROM eclipse-temurin:17-jre
+
 WORKDIR /app
 
-# Copy the Maven project files
-COPY pom.xml .
-COPY src ./src
+COPY --from=0 /app/target/demo-0.0.1-SNAPSHOT.jar app.jar
 
-# Build the project
-RUN ./mvnw clean package -DskipTests || mvn clean package -DskipTests
-
-# Copy the jar file built by Maven (update if your jar name is different)
-COPY target/*.jar app.jar
-
-# Expose port 8080
-EXPOSE 8080
-
-# Run the jar file
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar"]
