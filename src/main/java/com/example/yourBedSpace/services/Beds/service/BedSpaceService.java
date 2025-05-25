@@ -61,11 +61,18 @@ public class BedSpaceService {
     }
 
     public void deleteBedSpace(Long id) {
-        if (!bedSpaceRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "BedSpace not found");
-        }
-        bedSpaceRepository.deleteById(id);
+        // Check if bedspace exists, will throw NOT_FOUND if not found
+        BedSpace bedSpace = getBedSpaceById(id);
+
+        bedSpaceRepository.deleteById(bedSpace.getId());
     }
+
+    // This method should be defined at the class level, NOT inside another method
+    public BedSpace getBedSpaceById(Long id) {
+        return bedSpaceRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "BedSpace not found"));
+    }
+
 
     public List<BedSpaceReqRes> getAllBedSpaces() {
         return bedSpaceRepository.findAll().stream()
